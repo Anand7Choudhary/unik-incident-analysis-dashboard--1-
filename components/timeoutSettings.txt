@@ -1,0 +1,60 @@
+The chat timeout/cooldown logic is located entirely within one file:
+File: components/ChatAssistant.tsx
+I'll show you the specific lines of code you need to look at and how you can modify them.
+Where to Find the Code
+Inside components/ChatAssistant.tsx, there are two key places that control the 60-second cooldown:
+The State Initialization (Line ~29): This line sets the default duration of the cooldown.
+code
+TypeScript
+const [cooldown, setCooldown] = useState({ active: false, seconds: 60 });
+The Send Message Handler (Line ~80): This line is what actually starts the cooldown timer when you send a message.
+code
+TypeScript
+const handleSendMessage = async (e: React.FormEvent, messageText: string = input) => {
+    // ... other code ...
+    setIsLoading(true);
+    setCooldown({ active: true, seconds: 60 }); // <-- THIS LINE TRIGGERS IT
+    // ... other code ...
+};
+How to Manually Change It
+Here are the simple steps to either decrease the time or disable it completely.
+To Decrease the Cooldown Time (e.g., to 30 seconds):
+Go to components/ChatAssistant.tsx.
+Change the 60 to 30 in both of the locations mentioned above.
+Change this (line ~29):
+code
+TypeScript
+// From:
+const [cooldown, setCooldown] = useState({ active: false, seconds: 60 });
+// To:
+const [cooldown, setCooldown] = useState({ active: false, seconds: 30 });
+And change this (line ~80):
+code
+TypeScript
+// From:
+setCooldown({ active: true, seconds: 60 });
+// To:
+setCooldown({ active: true, seconds: 30 });
+To Completely Disable the Cooldown:
+Go to components/ChatAssistant.tsx.
+Find the handleSendMessage function.
+Simply comment out or delete the line that sets the cooldown.
+code
+TypeScript
+const handleSendMessage = async (e: React.FormEvent, messageText: string = input) => {
+    e.preventDefault();
+    if (!messageText.trim() || isLoading) return; // Note: removed cooldown.active from here
+
+    const userMessage: Message = { role: 'user', content: messageText, id: `user-${Date.now()}` };
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
+    setInput('');
+    setIsLoading(true);
+    
+    // V V V COMMENT OUT THIS LINE V V V
+    // setCooldown({ active: true, seconds: 60 }); 
+    // ^ ^ ^ COMMENT OUT THIS LINE ^ ^ ^
+
+    // ... the rest of the function remains the same ...
+};
+You will also want to remove the cooldown.active check from the if condition at the top of the function so the send button works correctly.
