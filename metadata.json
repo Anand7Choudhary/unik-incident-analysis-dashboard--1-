@@ -1,0 +1,5 @@
+{
+  "name": "UniK Incident Analysis Dashboard",
+  "description": "A data-driven dashboard for UniK healthcare to analyze incident reports from an uploaded Excel file. It provides high-level overviews, granular filtering, and key trend visualizations.",
+  "requestFramePermissions": []
+}
