@@ -78,7 +78,7 @@ const summarizeDataForPrompt = (incidents: ProcessedIncident[]): string => {
 
 
 export const getChatResponseForInsights = async (incidents: ProcessedIncident[], history: {role: 'user' | 'assistant', content: string}[]): Promise<string> => {
-  const apiKey = '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';
+  const apiKey = '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';
   
   try {
     const groq = new Groq({
